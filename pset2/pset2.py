@@ -110,7 +110,7 @@ def MonPaymentFast(balance, annualInterestRate):
         rounded off to the nearest cent.
     """
     
-    # Helper function to calculate balance at the end of 't' months
+    # Helper function to calculate balance at the end of 12 months
     def creditBalance(balance, mon_int_rate, fixed_mon_payment):
     
         # Start a loop to calculate the final balance
