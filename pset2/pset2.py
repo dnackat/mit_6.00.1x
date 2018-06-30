@@ -90,9 +90,9 @@ def fixedMonthlyPayment(balance, annualInterestRate, t):
     count = 0
     while temp_bal > 0:
         count += 1
-        print("Guess number:", count)
         temp_bal = creditBalance(balance, mon_int_rate, fixed_mon_payment, t)
         if temp_bal <= 0:
+            print("Guesses:", count)
             return fixed_mon_payment
         else:
             fixed_mon_payment += 10
@@ -139,9 +139,9 @@ def MonPaymentFast(balance, annualInterestRate):
     count = 0
     while True:
         count += 1
-        print("Guess number:", count)
         temp_bal = creditBalance(balance, mon_int_rate, mid)
         if abs(temp_bal) <= 0.01:
+            print("Guesses:", count)
             return round(mid, 2)
             break
         elif temp_bal > 0.01:
