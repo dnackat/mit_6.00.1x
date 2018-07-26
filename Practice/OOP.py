@@ -275,7 +275,7 @@ for i in range(p - len(result)):
 result = result[0:-p] + "." + result[-p:]
 print("Binary representation of the decimal:", str(x), "=", result)
 
-#%% Towers of Hanoi
+#%% Towers of Hanoi: Recursion
 def printMove(fr, to):
     print("Move from " + str(fr) + " to " + str(to))
     
