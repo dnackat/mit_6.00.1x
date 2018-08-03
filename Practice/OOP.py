@@ -348,3 +348,16 @@ def oddTuples(aTup):
         ret_tup += (aTup[i],)
         
     return ret_tup
+
+#%% Map function to list
+def applyToEach(L, f):
+    """ Assumes L is a list, f a function mutates the list by applying to each
+        element, e, of L by f(e). """
+        
+    for i in range(len(L)):
+        L[i] = f(L[i])
+        
+#%% Apply list of functions to a number
+def applyFuns(L, x):
+    for f in L:
+        print(f(x))
