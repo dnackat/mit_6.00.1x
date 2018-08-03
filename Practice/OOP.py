@@ -335,3 +335,16 @@ def get_data(aTuple):
     unique_words = len(words)
     
     return (min_nums, max_nums, unique_words)
+
+#%% Odd tuples
+def oddTuples(aTup):
+    '''
+    aTup: a tuple
+    
+    returns: tuple, every other element of aTup. 
+    '''
+    ret_tup = ()
+    for i in range(0,len(aTup),2):
+        ret_tup += (aTup[i],)
+        
+    return ret_tup
