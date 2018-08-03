@@ -401,3 +401,44 @@ def words_often(freqs, minTimes):
             done = True
             
     return result
+
+#%% All instances in a dict
+def how_many(aDict):
+    '''
+    aDict: A dictionary.
+
+    returns: int, how many values are in the dictionary.
+    '''
+    # Your Code Here
+    count = 0
+    for key in aDict.keys():
+        if type(aDict[key]) == list:
+            count += len(aDict[key])
+        elif type(aDict[key]) == dict:
+            count += len(aDict[key])
+        else:
+            count += 1
+            
+    return count
+
+def biggest(aDict):
+    '''
+    aDict: A dictionary.
+
+    returns: The key with the largest number of values associated with it
+    '''
+
+    # Your Code Here
+    biggest = 0
+    biggestkey = ''
+    for key in aDict.keys():
+        if type(aDict[key]) == list:
+            if len(aDict[key]) > biggest:
+                biggest = len(aDict[key])
+                biggestkey = key
+        elif type(aDict[key]) == dict:
+            if len(aDict[key]) > biggest:
+                biggest = len(aDict[key])
+                biggestkey = key
+            
+    return biggestkey
