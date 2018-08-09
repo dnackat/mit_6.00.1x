@@ -116,7 +116,9 @@ def hangman(secretWord):
     lettersGuessed = []
     game_active = True
     
+    print("****************************")
     print("Welcome to the game Hangman!")
+    print("****************************")
     print("I am thinking of a word that is", len(secretWord), "letters long")
     print("---------------")
     
