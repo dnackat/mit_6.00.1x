@@ -493,19 +493,31 @@ def uniqueValues(aDict):
             
     return sorted(key_list)
 
-#%% Flatten a list: order matters
+#%% Flatten a list: order matters --Recursion
+calls = 0
 def flatten(aList):
     ''' 
     aList: a list 
     Returns a copy of aList, which is a flattened version of aList 
     '''
+    global calls
+    calls += 1
+    
     if len(aList) == 0:
         return []
     else:
         if type(aList[0]) == list:
             return flatten(aList[0]) + flatten(aList[1:])
-            
+
     return aList[:1] + flatten(aList[1:])
+
+b = [[1, 'a', ['cat'], 2], [[[3]], 'dog'], 4, 5]
+
+b_flat = flatten(b)
+
+print("Original list:", b)
+print("Flattened list:", b_flat)
+print("I made", calls, "recursive calls.")
 
 #%% Scoring a word
 import string
@@ -535,11 +547,18 @@ def score(word, f):
     alph = string.ascii_letters
     scores = []
     
-    for c in word:
-        score = word.index(c) * ((alph.index(c) % 26) + 1)
+    if len(word) == 0:
+        return 0
+    
+    for i in range(len(word)):
+        score = i * ((alph.index(word[i]) % 26) + 1)
         scores.append(score)
     
     a = max(scores)
-    b = max(scores.remove(max(scores)))
+    if len(scores) > 1:
+        scores.remove(max(scores))
+        b = max(scores)
+    else:
+        b = 0
     
     return f(a, b)
