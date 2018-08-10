@@ -442,3 +442,72 @@ def biggest(aDict):
                 biggestkey = key
             
     return biggestkey
+
+#%% Recursive 7 count
+def count7(N):
+    '''
+    N: a non-negative integer
+    '''
+    if N < 7:
+        return 0
+    elif N == 7:
+        return 1
+    else:
+        if N % 10 == 7:
+            return 1 + count7(N//10)
+        else:
+            return 0 + count7(N//10) 
+        
+#%% Dot product of 2 vectors
+def dotProduct(listA, listB):
+    '''
+    listA: a list of numbers
+    listB: a list of numbers of the same length as listA
+    '''
+    dot_prod = 0
+    for i in range(len(listA)):
+        dot_prod += listA[i] * listB[i]
+            
+    return dot_prod
+
+#%% Unique values in a dict
+def uniqueValues(aDict):
+    '''
+    aDict: a dictionary
+    '''
+    
+    key_list = []
+    count = {}
+    
+    for key in aDict.keys():
+        if aDict[key] in count:
+            count[aDict[key]] += 1
+        else:
+            count[aDict[key]] = 1
+       
+    for key in count.keys():
+        if count[key] == 1:
+            for k in aDict.keys():
+                if aDict[k] == key:
+                    key_list.append(k)
+            
+    return sorted(key_list)
+
+#%% Flatten a list: order matters
+def flatten(aList):
+    ''' 
+    aList: a list 
+    Returns a copy of aList, which is a flattened version of aList 
+    '''
+    
+    ret_list = []
+    
+    for item in aList:
+        if type(item) == list:
+            for sublist in item:
+                for l in sublist:
+                    ret_list.append(l)
+        else:
+            ret_list.append(item)
+            
+    return ret_list
