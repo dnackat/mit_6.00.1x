@@ -499,15 +499,47 @@ def flatten(aList):
     aList: a list 
     Returns a copy of aList, which is a flattened version of aList 
     '''
-    
-    ret_list = []
-    
-    for item in aList:
-        if type(item) == list:
-            for sublist in item:
-                for l in sublist:
-                    ret_list.append(l)
-        else:
-            ret_list.append(item)
+    if len(aList) == 0:
+        return []
+    else:
+        if type(aList[0]) == list:
+            return flatten(aList[0]) + flatten(aList[1:])
             
-    return ret_list
+    return aList[:1] + flatten(aList[1:])
+
+#%% Scoring a word
+import string
+
+def f(a, b):
+    return a + b
+
+def score(word, f):
+    """
+       word, a string of length > 1 of alphabetical 
+             characters (upper and lowercase)
+       f, a function that takes in two int arguments and returns an int
+
+       Returns the score of word as defined by the method:
+
+    1) Score for each letter is its location in the alphabet (a=1 ... z=26) 
+       times its distance from start of word.  
+       Ex. the scores for the letters in 'adD' are 1*0, 4*1, and 4*2.
+    2) The score for a word is the result of applying f to the
+       scores of the word's two highest scoring letters. 
+       The first parameter to f is the highest letter score, 
+       and the second parameter is the second highest letter score.
+       Ex. If f returns the sum of its arguments, then the 
+           score for 'adD' is 12 
+    """
+
+    alph = string.ascii_letters
+    scores = []
+    
+    for c in word:
+        score = word.index(c) * ((alph.index(c) % 26) + 1)
+        scores.append(score)
+    
+    a = max(scores)
+    b = max(scores.remove(max(scores)))
+    
+    return f(a, b)
