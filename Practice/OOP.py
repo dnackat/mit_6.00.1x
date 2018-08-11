@@ -523,6 +523,8 @@ print("I made", calls, "recursive calls.")
 import string
 
 def f(a, b):
+    if (type(a) != int) or (type(b) != int):
+        raise Exception("Need integer inputs! Usage: f(int, int)")
     return a + b
 
 def score(word, f):
