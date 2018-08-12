@@ -564,3 +564,24 @@ def score(word, f):
         b = 0
     
     return f(a, b)
+
+#%% Control input
+data = []
+
+file_name = input("Provide the name of the file: ")
+
+try:
+    fh = open(file_name, 'r')
+except IOError:
+    print("Cannot open", file_name)
+else:
+    # Add file contents to data
+    for new in fh:
+        # Remove trailing '\n'
+        if new != '\n':
+            addIt = new[:-1].split(',')
+            data.append(addIt)
+finally:
+    # Close file even if writing fails
+    if fh:
+        fh.close()
