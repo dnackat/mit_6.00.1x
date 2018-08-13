@@ -8,29 +8,6 @@ Created on Wed Jun 13 18:51:54 2018
 Python Shenanigans
 
 """
-#%% OO code
-class Student():
-    def __init__(self, name, id):
-        self.name = name
-        self.id = id
-    
-    def ChangeID(self, id):
-        self.id = id
-        
-    def print(self):
-        print("{} - {}".format(self.name, self.id))
-
-class Car():
-    def __init__(self, make, model, year):
-        self.make = make
-        self.model = model
-        self.year = year
-        
-    def ChangeYear(self, year):
-        self.year = year
-        
-    def print(self):
-        print("{} - {} - {}".format(self.make, self.model, self.year))
 
 #%% Decorators * and ** in python       
 def print_tup(*args):
@@ -585,3 +562,239 @@ finally:
     # Close file even if writing fails
     if fh:
         fh.close()
+
+#%% OO code: Coordiante class
+class Coordinate(object):
+    
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    def distance(self, other):
+        diff_x_sq = (self.x - other.x)**2
+        diff_y_sq = (self.y - other.y)**2
+        
+        return (diff_x_sq + diff_y_sq)**0.5
+    
+    def __str__(self):
+        return "<" + str(self.x) + "," + str(self.y) +">"
+    
+    def __sub__(self, other):
+        return Coordinate(self.x - other.x, self.y - other.y)
+    
+#%% OO code: Fractions
+class Fraction(object):
+    
+    def __init__(self, numer, denom):
+        self.numer = numer
+        self.denom = denom
+    
+    # Print
+    def __str__(self):
+        return str(self.numer) + "/" + str(self.denom)
+    
+    # Getters
+    def getNumer(self):
+        return self.numer
+    
+    def getDenom(self):
+        return self.denom
+    
+    # Methods
+    def __add__(self, other):
+        new_num = other.getDenom() * self.getNumer() + other.getNumer() * \
+                    self.getDenom()
+        new_denom = self.getDenom() * other.getDenom()
+        
+        return Fraction(new_num, new_denom)
+    
+    def __sub__(self, other):
+        new_num = other.getDenom() * self.getNumer() - other.getNumer() * \
+                    self.getDenom()
+        new_denom = self.getDenom() * other.getDenom()
+        
+        return Fraction(new_num, new_denom)
+    
+    def convert(self):
+        return self.getNumer() / self.getDenom()
+
+#%% OO code: Set of integers
+class intSet(object):
+    
+    def __init__(self):
+        self.vals = []
+        
+    def insert(self, e):
+        if e not in self.vals:
+            self.vals.append(e)
+            
+    def member(self, e):
+        return e in self.vals
+    
+    def remove(self, e):
+        try:
+            self.vals.remove(e)
+        except:
+            raise ValueError(str(e) + " not found")
+    
+    def __str__(self):
+        self.vals.sort()
+        
+        result = ''
+        for e in self.vals:
+            result += str(e) + ', '
+            
+        return '{' + result[:-2] + '}' 
+    
+    def __len__(self):
+        """Returns the size of self"""
+        return len(self.vals)
+    
+    def intersect(self, other):
+        """Returns intersections of self and other"""
+        to_ret = intSet()
+        int_set = []
+        for el in self.vals:
+            if el in other.vals:
+                int_set.append(el)
+                to_ret.insert(el)
+                
+        return to_ret
+
+#%% OO code: Animals and inheritance
+class Animal(object):
+    
+    def __init__(self, age):
+        self.age = age
+        self.name = None
+     
+    # Getters
+    def get_age(self):
+        return self.age
+    
+    def get_name(self):
+        return self.name
+    
+    # Setters
+    def set_age(self, newAge):
+        self.age = newAge
+        
+    def set_name(self, newName=""):
+        self.name = newName
+        
+    def __str__(self):
+        return "animal: " + str(self.name) + ", " + str(self.age)
+    
+# Inheritance
+class cat(Animal):
+    # Inherits all props of Animals
+    
+    def speak(self):
+        print("meow")
+        
+    def __str__(self):
+        return "cat: " + str(self.name) + ", " + str(self.age)
+    
+class Rabbit(Animal):
+    # Example of class keeping track of the tag
+    tag = 1
+    
+    def __init__(self, age, parent1 = None, parent2 = None):
+        Animal.__init__(self, age)
+        self.parent1 = parent1
+        self.parent2 = parent2
+        self.rid = Rabbit.tag
+        Rabbit.tag += 1
+    
+    def speak(self):
+        print("meep")
+        
+    def __str__(self):
+        return "rabbit:"+str(self.name)+":"+str(self.age)
+    
+class Person(Animal):
+    def __init__(self, name, age):
+        Animal.__init__(self, age)
+        Animal.set_name(self, name)
+        self.friends = []
+        
+    def get_friends(self):
+        return self.friends
+    
+    def add_friend(self, fname):
+        if fname not in self.friends:
+            self.friends.append(fname)
+            
+    def speak(self):
+        print("hello")
+        
+    def age_diff(self, other):
+        # alternate way: diff = self.age - other.age
+        diff = self.get_age() - other.get_age()
+        if self.age > other.age:
+            print(self.name, "is", diff, "years older than", other.name)
+        else:
+            print(self.name, "is", -diff, "years younger than", other.name)
+            
+    def __str__(self):
+        return "person:"+str(self.name)+":"+str(self.age)
+    
+import random
+
+class Student(Person):
+    # Inherits props from the Person class, which itself inherits from Animal
+    def __init__(self, name, age, major=None):
+        Person.__init__(self, name, age)
+        self.major = major
+        
+    def change_major(self, major):
+       self.major = major
+       
+    def speak(self):
+        r = random.random()
+        if r < 0.25:
+            print("i have homework")
+        elif 0.25 <= r < 0.5:
+            print("i need sleep")
+        elif 0.5 <= r < 0.75:
+            print("i should eat")
+        else:
+            print("i am watching tv")
+            
+    def __str__(self):
+        return "student:"+str(self.name)+":"+str(self.age)+":"+str(self.major)
+
+#%% OO code: Example of inheritance
+class Spell(object):
+    def __init__(self, incantation, name):
+        self.name = name
+        self.incantation = incantation
+
+    def __str__(self):
+        return self.name + ' ' + self.incantation + '\n' + self.getDescription()
+              
+    def getDescription(self):
+        return 'No description'
+    
+    def execute(self):
+        print(self.incantation)
+
+
+class Accio(Spell):
+    def __init__(self):
+        Spell.__init__(self, 'Accio', 'Summoning Charm')
+
+class Confundo(Spell):
+    def __init__(self):
+        Spell.__init__(self, 'Confundo', 'Confundus Charm')
+
+    def getDescription(self):
+        return 'Causes the victim to become confused and befuddled.'
+
+def studySpell(spell):
+    print(spell)
+    
+spell = Accio()
+spell.execute()
+studySpell(spell)
+studySpell(Confundo())
