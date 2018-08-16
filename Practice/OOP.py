@@ -420,7 +420,7 @@ def biggest(aDict):
             
     return biggestkey
 
-#%% Recursive 7 count
+#%% Mid-term: Recursive 7 count
 def count7(N):
     '''
     N: a non-negative integer
@@ -435,7 +435,7 @@ def count7(N):
         else:
             return 0 + count7(N//10) 
         
-#%% Dot product of 2 vectors
+#%% Mid-term: Dot product of 2 vectors
 def dotProduct(listA, listB):
     '''
     listA: a list of numbers
@@ -447,7 +447,7 @@ def dotProduct(listA, listB):
             
     return dot_prod
 
-#%% Unique values in a dict
+#%% Mid-term: Unique values in a dict
 def uniqueValues(aDict):
     '''
     aDict: a dictionary
@@ -470,7 +470,7 @@ def uniqueValues(aDict):
             
     return sorted(key_list)
 
-#%% Flatten a list: order matters --Recursion
+#%% Mid-term: Flatten a list: order matters --Recursion
 calls = 0
 def flatten(aList):
     ''' 
@@ -496,7 +496,7 @@ print("Original list:", b)
 print("Flattened list:", b_flat)
 print("I made", calls, "recursive calls.")
 
-#%% Scoring a word
+#%% Mid-term: Scoring a word
 import string
 
 def f(a, b):
@@ -1116,3 +1116,255 @@ def genSubsets(L):
 test = [1,2,3,4]
 
 super = genSubsets(test)
+
+#%% Sorting and searching algorithms: Bisection search [O(nlogn), O(logn)]
+def bisect_search1(L, e):
+    if L == []:
+        return False
+    elif len(L) == 1:
+        return L[0] == e
+    else:
+        half = len(L)//2
+        if L[half] > e:
+            return bisect_search1( L[:half], e)
+        else:
+            return bisect_search1( L[half:], e)
+
+
+
+def bisect_search2(L, e):
+    def bisect_search_helper(L, e, low, high):
+        if high == low:
+            return L[low] == e
+        mid = (low + high)//2
+        if L[mid] == e:
+            return True
+        elif L[mid] > e:
+            if low == mid: #nothing left to search
+                return False
+            else:
+                return bisect_search_helper(L, e, low, mid - 1)
+        else:
+            return bisect_search_helper(L, e, mid + 1, high)
+    if len(L) == 0:
+        return False
+    else:
+        return bisect_search_helper(L, e, 0, len(L) - 1)
+
+testList = [5,3,2,1,7,18,9,27]
+
+#%% Bubble sort
+def bubble_sort(L):
+    swap = False
+    while not swap:
+        swap = True
+        print(L)
+        for j in range(1, len(L)):
+            if L[j-1] > L[j]:
+                swap = False
+                temp = L[j]
+                L[j] = L[j-1]
+                L[j-1] = temp
+
+
+test = [9, 8, 7, 6, 5, 4, 3, 2, 1]
+
+#%% Selection sort
+def selSort(L):
+    for i in range(len(L) - 1):
+        print(L)
+        minIndx = i
+        minVal= L[i]
+        j = i + 1
+        while j < len(L):
+            if minVal > L[j]:
+                minIndx = j
+                minVal= L[j]
+            j += 1
+        temp = L[i]
+        L[i] = L[minIndx]
+        L[minIndx] = temp
+        
+
+test = [1, 5, 3, 8, 4, 9, 6, 2]
+
+#%% Merge sort
+import operator
+
+def mergeSort(L, compare = operator.lt):
+    if len(L) < 2:
+        return L[:]
+    else:
+        middle = int(len(L)/2)
+        left = mergeSort(L[:middle], compare)
+        right = mergeSort(L[middle:], compare)
+        return merge(left, right, compare)
+
+def merge(left, right, compare):
+    result = []
+    i,j = 0, 0
+    while i < len(left) and j < len(right):
+        if compare(left[i], right[j]):
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    while (i < len(left)):
+        result.append(left[i])
+        i += 1
+    while (j < len(right)):
+        result.append(right[j])
+        j += 1
+    return result
+
+#%% Final Exam: McNuggets problem
+def McNuggets(n):
+    """
+    n is an int
+
+    Returns True if some integer combination of 6, 9 and 20 equals n
+    Otherwise returns False.
+    """
+    possible = False
+    for a in range(n//6 + 1):
+        for b in range(n//9 + 1):
+            for c in range(n//20 + 1):
+                if 6*a + 9*b + 20*c == n:
+                    possible = True
+                    break
+                
+    return possible
+
+#%% Final Exam: Find out if two lists are permutations of each other
+def is_list_permutation(L1, L2):
+    '''
+    L1 and L2: lists containing integers and strings
+    Returns False if L1 and L2 are not permutations of each other. 
+            If they are permutations of each other, returns a 
+            tuple of 3 items in this order: 
+            the element occurring most, how many times it occurs, and its type
+    '''
+    # If lists are of unequal sizes, return False
+    if len(L1) != len(L2):
+        return False
+    # If both lists are empty, return an empty list
+    elif len(L1) == 0 and len(L2) == 0:
+        return (None, None, None)
+    # Else, find if they are permutations 
+    else:
+        count_dict_L1 = {}
+        count_dict_L2 = {}
+        type_el = int
+        
+        for el1 in L1:
+            if el1 not in count_dict_L1:
+                count_dict_L1[el1] = 1
+            else:
+                count_dict_L1[el1] += 1
+                
+        for el2 in L2:
+            if el2 not in count_dict_L2:
+                count_dict_L2[el2] = 1
+            else:
+                count_dict_L2[el2] += 1 
+        
+        if count_dict_L1 == count_dict_L2:
+            most_times = 0
+            num_times = 0
+            type_el = int
+            for key in count_dict_L1.keys():
+                if count_dict_L1[key] > num_times:
+                    num_times = count_dict_L1[key]
+                    most_times = key
+                    type_el = type(key)
+                    
+        else:
+            return False
+        
+        return (most_times, num_times, type_el)
+
+#%% Final Exam: Dictionary operations problem
+def dict_interdiff(d1, d2):
+    '''
+    d1, d2: dicts whose keys and values are integers
+    Returns a tuple of dictionaries as per the following:
+    
+    - intersect: The keys to the intersect dictionary are keys that are common in 
+    both d1 and d2. To get the values of the intersect dictionary, look at the 
+    common keys in d1 and d2 and apply the function f to these keys' values -- 
+    the value of the common key in d1 is the first parameter to the function and 
+    the value of the common key in d2 is the second parameter to the function. 
+    Do not implement f inside your dict_interdiff code -- assume it is defined 
+    outside.
+    
+    - difference: a key-value pair in the difference dictionary is (a) every 
+    key-value pair in d1 whose key appears only in d1 and not in d2 and (b) 
+    every key-value pair in d2 whose key appears only in d2 and not in d1.
+    '''
+    # Helper function
+    def f(a, b):
+        return a + b
+    
+    # Intersect
+    int_dict = {}
+    for key in d1.keys():
+        if key in d2:
+            int_dict[key] = f(d1[key], d2[key])
+            
+    # Difference
+    diff_dict = {}
+    for key in d1.keys():
+        if key not in int_dict:
+            diff_dict[key] = d1[key]
+            
+    for key in d2.keys():
+        if key not in int_dict:
+            diff_dict[key] = d2[key]
+            
+    return (int_dict, diff_dict)
+
+#%% Final Exam: Arrogant Professor OOP problem
+class Person(object):     
+    def __init__(self, name):         
+        self.name = name     
+    def say(self, stuff):         
+        return self.name + ' says: ' + stuff     
+    def __str__(self):         
+        return self.name  
+
+class Lecturer(Person):     
+    def lecture(self, stuff):         
+        return 'I believe that ' + Person.say(self, stuff)  
+
+class Professor(Lecturer): 
+    def say(self, stuff): 
+        return self.name + ' says: ' + self.lecture(stuff)
+
+class ArrogantProfessor(Professor): 
+    def say(self, stuff): 
+        return Person.say(self, 'It is obvious that ' + Person.say(self, stuff))
+    
+    def lecture(self, stuff):
+        return 'It is obvious that ' + Person.say(self, stuff)
+    
+#%% Final Exam: Container OOP problem
+class Container(object):
+    """ Holds hashable objects. Objects may occur 0 or more times """
+    def __init__(self):
+        """ Creates a new container with no objects in it. I.e., any object 
+            occurs 0 times in self. """
+        self.vals = {}
+    def insert(self, e):
+        """ assumes e is hashable
+            Increases the number times e occurs in self by 1. """
+        try:
+            self.vals[e] += 1
+        except:
+            self.vals[e] = 1
+    def __str__(self):
+        s = ""
+        for i in sorted(self.vals.keys()):
+            if self.vals[i] != 0:
+                s += str(i)+":"+str(self.vals[i])+"\n"
+        return s
