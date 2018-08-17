@@ -1233,7 +1233,12 @@ def McNuggets(n):
                 if 6*a + 9*b + 20*c == n:
                     possible = True
                     break
-                
+            if possible:
+                break
+        if possible:
+            break
+    
+    print("a =", a, ", b =", b, ", c =", c, ", n =", n)          
     return possible
 
 #%% Final Exam: Find out if two lists are permutations of each other
@@ -1282,7 +1287,7 @@ def is_list_permutation(L1, L2):
         else:
             return False
         
-        return (most_times, num_times, type_el)
+    return (most_times, num_times, type_el)
 
 #%% Final Exam: Dictionary operations problem
 def dict_interdiff(d1, d2):
@@ -1368,3 +1373,21 @@ class Container(object):
             if self.vals[i] != 0:
                 s += str(i)+":"+str(self.vals[i])+"\n"
         return s
+    
+class ASet(Container):
+    def remove(self, e):
+        """assumes e is hashable
+           removes e from self"""
+        try:
+            del(self.vals[e])
+        except:
+            pass
+
+    def is_in(self, e):
+        """assumes e is hashable
+           returns True if e has been inserted in self and
+           not subsequently removed, and False otherwise."""
+        try:
+            return e in self.vals
+        except:
+            return False
