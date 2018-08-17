@@ -1311,18 +1311,15 @@ def dict_interdiff(d1, d2):
     def f(a, b):
         return a + b
     
-    # Intersect
+    # Intersect and difference
     int_dict = {}
+    diff_dict = {}
     for key in d1.keys():
         if key in d2:
             int_dict[key] = f(d1[key], d2[key])
-            
-    # Difference
-    diff_dict = {}
-    for key in d1.keys():
-        if key not in int_dict:
+        else:
             diff_dict[key] = d1[key]
-            
+
     for key in d2.keys():
         if key not in int_dict:
             diff_dict[key] = d2[key]
