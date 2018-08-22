@@ -1074,6 +1074,7 @@ class Hand(object):
     
 #%% Fancy Fibonacci
 def genFib():
+    """ Fibonacci numbers using generators. """
     fibn_1 = 1 #fib(n-1)
     fibn_2 = 0 #fib(n-2)
     while True:
@@ -1085,6 +1086,7 @@ def genFib():
         
 #%% Prime number generator
 def genPrimes():
+    """ Prime numbers using generators. """
     primes = [2]
     curr = 2
     while True:
@@ -1104,6 +1106,7 @@ def genPrimes():
             
 #%% Generating subsets: exponential complexity algorithm
 def genSubsets(L):
+    """ Generating subsets using recursion. Exponential complexity. """
     if len(L) == 0:
         return [[]] #list of empty list
     smaller = genSubsets(L[:-1]) # all subsets without last element
@@ -1119,6 +1122,7 @@ super = genSubsets(test)
 
 #%% Sorting and searching algorithms: Bisection search [O(nlogn), O(logn)]
 def bisect_search1(L, e):
+    """ Bisection search with O(nlogn) complexity. """
     if L == []:
         return False
     elif len(L) == 1:
@@ -1133,6 +1137,7 @@ def bisect_search1(L, e):
 
 
 def bisect_search2(L, e):
+    """ Bisection search with O(logn) complexity. """
     def bisect_search_helper(L, e, low, high):
         if high == low:
             return L[low] == e
@@ -1155,6 +1160,7 @@ testList = [5,3,2,1,7,18,9,27]
 
 #%% Bubble sort
 def bubble_sort(L):
+    """ Bubble sort a list. """
     swap = False
     while not swap:
         swap = True
@@ -1171,6 +1177,7 @@ test = [9, 8, 7, 6, 5, 4, 3, 2, 1]
 
 #%% Selection sort
 def selSort(L):
+    """ Selection sorting a list. """
     for i in range(len(L) - 1):
         print(L)
         minIndx = i
