@@ -1209,7 +1209,7 @@ def mergeSort(L, compare = operator.lt):
 
 def merge(left, right, compare):
     result = []
-    i,j = 0, 0
+    i, j = 0, 0
     while i < len(left) and j < len(right):
         if compare(left[i], right[j]):
             result.append(left[i])
