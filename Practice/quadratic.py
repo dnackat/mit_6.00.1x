@@ -33,5 +33,4 @@ if type(a) == float and type(b) == float and type(c) == float:
         root1 = (-b + math.sqrt(b**2 - 4*a*c))/(2*a)
         root2 = (-b - math.sqrt(b**2 - 4*a*c))/(2*a)
     # Print the solution
-    print("The roots of this quadratic equation are: \
-          {:.2f} and {:.2f}".format(root1, root2))
+    print("The roots of this quadratic equation are: {:.2f} and {:.2f}".format(root1, root2))
