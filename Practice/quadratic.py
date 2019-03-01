@@ -26,11 +26,12 @@ except:
 
 # Calculate the roots
 if type(a) == float and type(b) == float and type(c) == float:
-    if (b**2 - 4*a*c) < 0:
-        root1 = (-b + cmath.sqrt(b**2 - 4*a*c))/(2*a)
-        root2 = (-b - cmath.sqrt(b**2 - 4*a*c))/(2*a)
+    disc = b**2 - 4*a*c
+    if disc < 0:
+        root1 = (-b + cmath.sqrt(disc))/(2*a)
+        root2 = (-b - cmath.sqrt(disc))/(2*a)
     else:
-        root1 = (-b + math.sqrt(b**2 - 4*a*c))/(2*a)
-        root2 = (-b - math.sqrt(b**2 - 4*a*c))/(2*a)
+        root1 = (-b + math.sqrt(disc))/(2*a)
+        root2 = (-b - math.sqrt(disc))/(2*a)
     # Print the solution
     print("The roots of this quadratic equation are: {:.2f} and {:.2f}".format(root1, root2))
