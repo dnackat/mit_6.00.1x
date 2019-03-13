@@ -17,12 +17,14 @@ import cmath
 print("This program solves quadratic equations of the form Ax^2 + Bx + C = 0")
 
 # Get coefficients
-try:
-    a = float(input("Please enter the value for A: "))
-    b = float(input("Please enter the value for B: "))
-    c = float(input("Please enter the value for C: "))
-except:
-    print("Invalid input! Try again.")
+while True:
+    try:
+        a = float(input("Please enter the value for A: "))
+        b = float(input("Please enter the value for B: "))
+        c = float(input("Please enter the value for C: "))
+        break
+    except:
+        print("Invalid input! Try again.")
 
 # Calculate the roots
 if type(a) == float and type(b) == float and type(c) == float:
