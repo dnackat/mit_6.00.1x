@@ -9,8 +9,9 @@ Created on Wed Mar 13 22:36:09 2019
 import numpy as np
 import matplotlib.pyplot as plt
 
-x = np.linspace(0,25,1000)
-y = 1/(np.exp(x)-1)
+x = np.linspace(-10,10,1000)
+b = 2
+y = (1/(2*b))*np.exp(-np.abs(x)/b)
 
 plt.plot(x,y,'r-')
 
