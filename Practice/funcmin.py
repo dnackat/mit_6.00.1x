@@ -9,9 +9,9 @@ Created on Wed Mar 13 22:36:09 2019
 import numpy as np
 import matplotlib.pyplot as plt
 
-x = np.array([[1],[2],[3]])
-m = 3
-y = np.sum(np.abs(x-m))
+x = np.linspace(0,2,100)
+theta = 1
+y = np.exp(-theta*x)
 
 plt.plot(x,y,'r-')
 
