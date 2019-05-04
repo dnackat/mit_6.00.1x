@@ -67,13 +67,27 @@ for i in range(len(lambda_list)):
 
 x_n = [0.28, 0.2, 0.01, 0.8, 0.1]
 
-y_n = [0.1654909, 0.2592453, 0.388613, 0.5028942, 0.9708538]
-
 n = len(x_n)
 
 x_n.sort()
 
 T_n_ks = max([max(abs(i/n - x_n[i]), abs((i+1)/n - x_n[i])) for i in range(n)])
+
+#%% Kolmogorov-Lilliefors test statistics calculation
+
+import scipy.stats as st
+
+x_n = [0.28, 0.2, 0.01, 0.8, 0.1]
+
+n = len(x_n)
+
+x_n.sort()
+
+mu_bar = sum(x_n)/n
+
+s_bar = sum([(x_n[i]-mu_bar)**2 for i in range(len(x_n))])/n
+
+y_n = [st.norm(mu_bar,np.sqrt(s_bar)).cdf(x_n[i]) for i in range(len(x_n))]
 
 T_n_kl = max([max(abs(i/n - y_n[i]), abs((i+1)/n - y_n[i])) for i in range(n)])
 
@@ -142,12 +156,24 @@ lambda_list = [0.4, 0.7]
 
 prob = [1/5, 4/5]
 
+post_prob_unnorm = [0, 0]
+
 post_prob = [0, 0]
 
-Lhood = 0
-
-for i in range(len(lambda_list)):
-    Lhood += prob[i]*((lambda_list[i])**3*(1-lambda_list[i])**3)
+post_prob_unnorm = [prob[i]*((lambda_list[i])**3*(1-lambda_list[i])**3) \
+                    for i in range(len(lambda_list))]
     
-for i in range(len(lambda_list)):
-    post_prob[i] = prob[i]*((lambda_list[i])**3*(1-lambda_list[i])**3)/Lhood
+post_prob = [post_prob_unnorm[i]/sum(post_prob_unnorm) for i in \
+             range(len(lambda_list))]
+
+lambda_Bayes = sum([lambda_list[i]*post_prob[i] for i in range(len(lambda_list))]) 
+    
+#%% Monte-Carlo estimate of pi
+import scipy.stats as st
+nsim = int(1e6)
+x = np.random.uniform(-1,1,nsim)
+y = np.random.uniform(-1,1,nsim)
+
+PI = 4*sum(x**2 + y**2 < 1)/nsim
+
+print("Simulated value of pi is:", PI)
