@@ -91,7 +91,7 @@ y_n = [st.norm(mu_bar,np.sqrt(s_bar)).cdf(x_n[i]) for i in range(len(x_n))]
 
 T_n_kl = max([max(abs(i/n - y_n[i]), abs((i+1)/n - y_n[i])) for i in range(n)])
 
-#%% K-S test using simulation
+#%% K-S test quantile using simulation
 import numpy as np
 from scipy import stats 
 import matplotlib.pyplot as plt
@@ -170,10 +170,34 @@ lambda_Bayes = sum([lambda_list[i]*post_prob[i] for i in range(len(lambda_list))
     
 #%% Monte-Carlo estimate of pi
 import scipy.stats as st
+
 nsim = int(1e6)
+
 x = np.random.uniform(-1,1,nsim)
 y = np.random.uniform(-1,1,nsim)
 
 PI = 4*sum(x**2 + y**2 < 1)/nsim
 
 print("Simulated value of pi is:", PI)
+
+#%% Factorial and combinations
+def fact(x):
+    if x == 0 or x == 1:
+        return 1
+    
+    return x*fact(x-1)
+
+def nCx(n, x):
+    if n == 0:
+        return 0 
+    elif x == 0:
+        return 1
+    elif x == 1:
+        return n
+    
+#%% Plot func.: conditional quantile
+x = np.linspace(0,1,100)
+alpha = 0.05
+y = -x + np.sqrt(x**2 + 2*(x+0.5)*(1-alpha))
+
+plt.plot(x,y,'r-',linewidth=2)
