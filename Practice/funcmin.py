@@ -197,7 +197,16 @@ def nCx(n, x):
     
 #%% Plot func.: conditional quantile
 x = np.linspace(0,1,100)
-alpha = 0.05
-y = -x + np.sqrt(x**2 + 2*(x+0.5)*(1-alpha))
 
-plt.plot(x,y,'r-',linewidth=2)
+alpha1 = 0.05
+alpha2 = 0.1
+
+y1 = -x + np.sqrt(x**2 + 2*(x+0.5)*(1-alpha1))
+y2 = -x + np.sqrt(x**2 + 2*(x+0.5)*(1-alpha2))
+
+plt.figure()
+plt.plot(x, y1, 'r-', linewidth = 2, label= 'alpha = 0.05')
+plt.plot(x, y2, 'b-', linewidth = 2, label = 'alpha = 0.1')
+plt.legend(loc = 'best')
+
+#%% Plot functions to compare
