@@ -210,18 +210,21 @@ plt.plot(x, y2, 'b-', linewidth = 2, label = 'alpha = 0.1')
 plt.legend(loc = 'best')
 
 #%% Plot functions to compare
-x1 = np.linspace(-10,10,200)
-x2 = np.linspace(0.1,10,100)
+x1 = np.linspace(-5,5,100)
+x2 = np.linspace(0.1,5,100)
+x3 = np.linspace(0.1,0.99,100)
 
-y1 = x1**2
-y2 = x1**3 - 3
-y3 = 1 - np.exp(-x)
-y4 = np.log(x)
+y1 = x1
+y2 = -1/x2
+y3 = x1**2
+y4 = np.log(x3**3/(1-x3**3))
+y5 = -np.log(-np.log(x2/6))
 
 plt.figure()
-plt.plot(y1,x1,'k-',label='x^2',linewidth=2)
-plt.plot(y2,x1,'b-',label='x^3-3',linewidth=2)
-plt.plot(y3,x1,'g-',label='1-exp(-x)',linewidth=2)
-plt.plot(y4,x2,'k-',label='log(x)',linewidth=2)
+plt.plot(x1,y1,'k-',label='f1',linewidth=2)
+plt.plot(x2,y2,'b-',label='f2',linewidth=2)
+plt.plot(x1,y3,'g-',label='f3',linewidth=2)
+plt.plot(x3,y4,'y-',label='f4',linewidth=2)
+plt.plot(x2,y5,'c-',label='f5',linewidth=2)
 plt.legend(loc='best')
 plt.show()
