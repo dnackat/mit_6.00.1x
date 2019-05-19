@@ -228,3 +228,10 @@ plt.plot(x3,y4,'y-',label='f4',linewidth=2)
 plt.plot(x2,y5,'c-',label='f5',linewidth=2)
 plt.legend(loc='best')
 plt.show()
+
+#%% Plot func to check concavity
+beta = np.linspace(-10,10,1000)
+
+L2 = -1 - np.exp(beta)/(1 + np.exp(beta))**2
+
+plt.plot(beta,L2,'b-',label='f1',linewidth=2)
