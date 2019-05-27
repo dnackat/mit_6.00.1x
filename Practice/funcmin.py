@@ -237,13 +237,37 @@ L2 = -1 - np.exp(beta)/(1 + np.exp(beta))**2
 plt.plot(beta,L2,'b-',label='f1',linewidth=2)
 
 #%% Phase noise plots
-x = np.linspace(0, np.pi/2, 100)
-phi = np.pi/3
+theta = np.linspace(0, np.pi/2, 500)
 
-y1 = np.cos(x + phi)
-y2 = np.sin(x + phi)
+# Phase shift
+phi_o = 0
+phi_f = np.pi/3
+
+# Before phase shift
+y1_o = np.cos(theta + phi_o)    
+y2_o = np.sin(theta + phi_o)
+
+# After 30deg phase shift
+y1_f = np.cos(theta + phi_f)    
+y2_f = np.sin(theta + phi_f)
+
+# Fix a theta to plot vectors before and after phase shift
+theta_v = np.pi/6
+origin = [0], [0]
+
+# Vectors before and after phase shift
+x_o = np.array([[np.cos(theta_v + phi_o)],[np.sin(theta_v + phi_o)]])
+x_f = np.array([[np.cos(theta_v + phi_f)],[np.sin(theta_v + phi_f)]])
 
 plt.figure()
-plt.plot(x,y1,'b-',label='cosine',linewidth=2)
-plt.plot(x,y2,'r-',label='sine',linewidth=2)
-plt.legend(loc='best')
+plt.subplot(1,2,1); plt.plot(theta,y1_o,'b-',label='cosine',linewidth=2); plt.title('Signal');\
+plt.grid()
+plt.subplot(1,2,1); plt.plot(theta,y2_o,'r-',label='sine',linewidth=2)
+plt.subplot(1,2,1); plt.plot(theta,y1_f,'b--',label='shifted cosine',linewidth=1)
+plt.subplot(1,2,1); plt.plot(theta,y2_f,'r--',label='shifted sine',linewidth=1); plt.legend(loc='best')
+plt.subplot(1,2,2); plt.quiver(*origin, x_o[0,0], x_o[1,0], color=['k'], \
+           label = 'before shift', units='xy' ,scale=2); plt.title('Signal vector'); \
+           plt.grid(); plt.xlim(-1,1); plt.ylim(-1,1)
+plt.subplot(1,2,2); plt.quiver(*origin, x_f[0,0], x_f[1,0], color=['g'], \
+           label = 'after shift', units='xy' ,scale=2); plt.legend(loc='lower left')
+plt.savefig('phaseNoise.pdf')
