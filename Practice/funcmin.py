@@ -235,3 +235,15 @@ beta = np.linspace(-10,10,1000)
 L2 = -1 - np.exp(beta)/(1 + np.exp(beta))**2
 
 plt.plot(beta,L2,'b-',label='f1',linewidth=2)
+
+#%% Phase noise plots
+x = np.linspace(0, np.pi/2, 100)
+phi = np.pi/3
+
+y1 = np.cos(x + phi)
+y2 = np.sin(x + phi)
+
+plt.figure()
+plt.plot(x,y1,'b-',label='cosine',linewidth=2)
+plt.plot(x,y2,'r-',label='sine',linewidth=2)
+plt.legend(loc='best')
