@@ -274,14 +274,16 @@ plt.savefig('phaseNoise.pdf')
 
 #%% Trial PCA algorithm
 
-# Generate observations drawn from a standard normal and build design matrix
+# Generate observations drawn from a normal and build design matrix
+mean = 0    # mean of distribution
+variance = 1    # variance of distribution
 p = 10   # features
-n = 100  # samples
+n = 500  # samples
 
 X = np.zeros((n,p))     # Design matrix
 
 for i in range(n):
-    X[i,:] = np.random.standard_normal(p)
+    X[i,:] = np.random.normal(mean, np.sqrt(variance), p)
 
 # Compute the empirical covariance matrix, S, of X
 ones = np.ones((n,1))
@@ -303,10 +305,12 @@ P_k = P[:,0:k]
 Y = X.dot(P_k)
 
 # Plot the projected point cloud
-#a = np.array([[Y[0,0],0],[Y[1,0],0],[Y[2,0],0]])
-
 plt.figure()
-plt.plot(Y[:,0], Y[:,1], color='red', marker='o', markersize=8, ls = '')
-plt.xlabel('PC1')
-plt.ylabel('PC2')
+if k == 1:
+    plt.plot(Y[:,0], np.zeros((n,1)), color='red', marker='o', markersize=4, ls = '')
+    plt.xlabel('PC1')
+else:
+    plt.plot(Y[:,0], Y[:,1], color='red', marker='o', markersize=6, ls = '')
+    plt.xlabel('PC1')
+    plt.ylabel('PC2')
 plt.title('Principal Component Analysis')
