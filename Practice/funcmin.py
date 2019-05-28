@@ -271,3 +271,33 @@ plt.subplot(1,2,2); plt.quiver(*origin, x_o[0,0], x_o[1,0], color=['k'], \
 plt.subplot(1,2,2); plt.quiver(*origin, x_f[0,0], x_f[1,0], color=['g'], \
            label = 'after shift', units='xy' ,scale=2); plt.legend(loc='lower left')
 plt.savefig('phaseNoise.pdf')
+
+#%% Trial PCA algorithm
+
+# Observations
+X1 = np.array([[2],[-3],[0]])
+X2 = np.array([[0],[2],[4]])
+X3 = np.array([[5],[0],[-7]])
+
+# Design matrix
+X = np.vstack((np.vstack((X1.T,X2.T)),X3.T))
+
+# Compute the empirical covariance matrix of X
+n = X.shape[0]
+
+ones = np.ones((n,1))
+
+H = np.identity(n) - (1/n)*ones.dot(ones.T) # Orthogonal projection matrix H 
+
+S = (1/n)*X.T.dot(H).dot(X)
+
+# Spectral decomposition of S to get eigenvector matrix, P
+P = np.linalg.svd(S)[0]
+
+# Choose number of principal directions to keep
+k = 1
+
+# Chop P so it has only k eigenvectors (columns)
+P_k = P[:,0:k]
+
+# Project the observations onto this principal component
