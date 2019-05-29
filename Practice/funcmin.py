@@ -315,7 +315,7 @@ else:
     plt.ylabel('PC2')
 plt.title('Principal Component Analysis')
 
-#%% Principal component regression (for features, d > samples, n)
+#%% PCR: Principal component regression (for features, p > samples, n)
 
 # Generate observations drawn from a normal and build design matrix
 mean = 0    # mean of distribution
@@ -328,7 +328,7 @@ X = np.zeros((n,p))     # Design matrix
 for i in range(n):
     X[i,:] = np.random.normal(mean, np.sqrt(variance), p)
     
-Y = np.random.exponential(scale=1.5, size=n)    # Response variable
+Y = np.array(np.random.exponential(scale=1.5, size=n)).reshape((n,1))   # Response variable
 
 # Compute the empirical covariance matrix, S, of X
 ones = np.ones((n,1))
@@ -341,9 +341,27 @@ S = (1/n)*X.T.dot(H).dot(X)
 P = np.linalg.svd(S)[0]
 
 # Choose number of principal directions to keep
-k = 2
+k = 9
 
 # Chop P so it has only k eigenvectors (columns)
 P_k = P[:,0:k]
 
-# 
+# Get the parameter vector for PCR
+W = X.dot(P_k)  # Projected data matrix
+
+gamma_hat = np.linalg.inv(W.T.dot(W)).dot(W.T).dot(Y)
+
+beta_PCR = P_k.dot(gamma_hat)   # Parameter vector for PCR
+
+# Check prediction for a data point in the data set
+sample = 4
+
+x_pred = X[sample,:]
+
+y_pred = x_pred.dot(beta_PCR)
+
+abs_error = np.abs(Y[sample,0] - float(y_pred))
+
+print("Actual response for the given data point is: {:.2f}".format(Y[sample,0]))
+print("Predicted response for the given data point is: {:.2f}".format(float(y_pred)))
+print("Absolute prediction error is: {:.2f}".format(abs_error))
