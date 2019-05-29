@@ -319,54 +319,61 @@ plt.title('Principal Component Analysis')
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Generate observations drawn from a std. normal dist. and build design matrix
-p = 20   # features
-n = 10  # samples
-
-X = np.zeros((n,p))     # Design matrix
-
-for i in range(n):
-    X[i,:] = np.random.standard_normal(size=p)
+def pc_reg(n,p):
+    """ This function runs principal component regression on a design matrix (with p > n)
+    that is generated using draws from a standard normal distribution using 
+    different values of principal components, k, and plots prediction error 
+    (squared norm of the difference between the response vector, Y, and the
+    predicted response, Y_pred) versus k. """
     
-Y = np.array(np.random.exponential(scale=1, size=n)).reshape((n,1))   # Response variable
+    X = np.zeros((n,p))     # Design matrix
 
-# Compute the empirical covariance matrix, S, of X
-ones = np.ones((n,1))
-
-H = np.identity(n) - (1/n)*ones.dot(ones.T) # Orthogonal projection matrix H 
-
-S = (1/n)*X.T.dot(H).dot(X)
-
-# Spectral decomposition of S to get eigenvector matrix, P
-P = np.linalg.svd(S)[0]
-
-# Choose number of principal directions to keep
-k = 8
-
-# Chop P so it has only k eigenvectors (columns)
-P_k = P[:,0:k]
-
-# Get the parameter vector for PCR
-
-W = X.dot(P_k)  # Projected data matrix
-
-gamma_hat = np.linalg.inv(W.T.dot(W)).dot(W.T).dot(Y)
-
-beta_PCR = P_k.dot(gamma_hat)   # Parameter vector for PCR
-
-# Check prediction for a data point in the data set
-sample = int(np.random.randint(0, high=n-1, size=1))
-
-x_pred = X[sample,:]
-
-y_pred = float(x_pred.dot(beta_PCR))
-
-abs_error = np.abs(Y[sample,0] - y_pred)
-
-print("Actual response for the given data point is: {:.2f}".format(Y[sample,0]))
-print("Predicted response for the given data point is: {:.2f}".format(y_pred))
-print("Absolute prediction error is: {:.2f}".format(abs_error))
-
+    for i in range(n):
+        X[i,:] = np.random.standard_normal(size=p)
+    
+    Y = np.array(np.random.exponential(scale=1, size=n)).reshape((n,1))   # Response variable
+    
+    # Compute the empirical covariance matrix, S, of X
+    ones = np.ones((n,1))
+    
+    H = np.identity(n) - (1/n)*ones.dot(ones.T) # Orthogonal projection matrix H 
+    
+    S = (1/n)*X.T.dot(H).dot(X)
+    
+    # Spectral decomposition of S to get eigenvector matrix, P
+    P = np.linalg.svd(S)[0]
+    
+    # normed error vector for plotting
+    error_vec = np.zeros((n, 1))
+    
+    for i in range(n):
+        k = i + 1   # Principal components
+        
+        # Chop P so it has only k eigenvectors (columns)
+        P_k = P[:,0:k]
+        
+        # Get the parameter vector for PCR
+        
+        W = X.dot(P_k)  # Projected data matrix
+        
+        gamma_hat = np.linalg.inv(W.T.dot(W)).dot(W.T).dot(Y)
+        
+        beta_PCR = P_k.dot(gamma_hat)   # Parameter vector for PCR
+        
+        # Check prediction for a data point in the data set
+        
+        y_pred = X.dot(beta_PCR)
+        
+        error_vec[i,0] = np.linalg.norm(y_pred - Y)
+    
+    plt.figure()
+    plt.plot(range(n),error_vec, 'r-', linewidth='2')
+    plt.title('Prediction error vs. principal components')
+    plt.xlabel('Principal components, k')
+    plt.ylabel('Prediction error of PCR')
+    
+pc_reg(25, 100)
+    
 #%% Ridge regression
 import numpy as np
 import matplotlib.pyplot as plt
@@ -374,7 +381,7 @@ import matplotlib.pyplot as plt
 tau = 0   # Regularization parameter (set tau = 0 for OLS Regression)
 
 # Generate observations drawn from a normal and build design matrix
-p = 10   # features
+p = 50   # features
 n = 500  # samples
 
 X = np.ones((n,p+1))     # Design matrix
