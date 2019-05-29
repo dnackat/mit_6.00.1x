@@ -324,14 +324,15 @@ def pc_reg(n,p):
     that is generated using draws from a standard normal distribution using 
     different values of principal components, k, and plots prediction error 
     (squared norm of the difference between the response vector, Y, and the
-    predicted response, Y_pred) versus k. """
+    predicted response, Y_pred) versus k. Responses Y are generated using 
+    random draws from a gamma distribution. """
     
     X = np.zeros((n,p))     # Design matrix
 
     for i in range(n):
         X[i,:] = np.random.standard_normal(size=p)
     
-    Y = np.array(np.random.exponential(scale=1, size=n)).reshape((n,1))   # Response variable
+    Y = np.array(np.random.gamma(2,2,n)).reshape((n,1))   # Response variable
     
     # Compute the empirical covariance matrix, S, of X
     ones = np.ones((n,1))
@@ -360,7 +361,7 @@ def pc_reg(n,p):
         
         beta_PCR = P_k.dot(gamma_hat)   # Parameter vector for PCR
         
-        # Check prediction for a data point in the data set
+        # Check prediction error
         
         y_pred = X.dot(beta_PCR)
         
@@ -378,7 +379,7 @@ pc_reg(25, 100)
 import numpy as np
 import matplotlib.pyplot as plt
 
-tau = 0   # Regularization parameter (set tau = 0 for OLS Regression)
+tau = 2   # Regularization parameter (set tau = 0 for OLS Regression)
 
 # Generate observations drawn from a normal and build design matrix
 p = 50   # features
@@ -394,14 +395,9 @@ Y = np.array(np.random.gamma(2,1,n)).reshape((n,1))   # Response variable
 beta_ridge = np.linalg.inv(X.T.dot(X) + tau*np.eye(p+1)).dot(X.T).dot(Y) # parameter vector
 
 # Check prediction for a data point in the data set
-sample = int(np.random.randint(0, high=n-1, size=1))
 
-x_pred = X[sample,:]
+y_pred = X.dot(beta_ridge)
+        
+normed_error = np.linalg.norm(y_pred - Y)   # Pred. error = ||Y_pred - Y||^2
 
-y_pred = float(x_pred.dot(beta_ridge))
-
-abs_error = np.abs(Y[sample,0] - y_pred)
-
-print("Actual response for the given data point is: {:.2f}".format(Y[sample,0]))
-print("Predicted response for the given data point is: {:.2f}".format(y_pred))
-print("Absolute prediction error is: {:.2f}".format(abs_error))
+print("Prediction error is: {:.2f}".format(normed_error))
