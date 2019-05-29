@@ -273,6 +273,8 @@ plt.subplot(1,2,2); plt.quiver(*origin, x_f[0,0], x_f[1,0], color=['g'], \
 plt.savefig('phaseNoise.pdf')
 
 #%% Trial PCA algorithm
+import numpy as np
+import matplotlib.pyplot as plt
 
 # Generate observations drawn from a normal and build design matrix
 p = 10   # features
@@ -314,6 +316,8 @@ else:
 plt.title('Principal Component Analysis')
 
 #%% PCR: Principal component regression (for features, p > samples, n)
+import numpy as np
+import matplotlib.pyplot as plt
 
 # Generate observations drawn from a std. normal dist. and build design matrix
 p = 20   # features
@@ -337,12 +341,13 @@ S = (1/n)*X.T.dot(H).dot(X)
 P = np.linalg.svd(S)[0]
 
 # Choose number of principal directions to keep
-k = 9
+k = 8
 
 # Chop P so it has only k eigenvectors (columns)
 P_k = P[:,0:k]
 
 # Get the parameter vector for PCR
+
 W = X.dot(P_k)  # Projected data matrix
 
 gamma_hat = np.linalg.inv(W.T.dot(W)).dot(W.T).dot(Y)
@@ -350,7 +355,7 @@ gamma_hat = np.linalg.inv(W.T.dot(W)).dot(W.T).dot(Y)
 beta_PCR = P_k.dot(gamma_hat)   # Parameter vector for PCR
 
 # Check prediction for a data point in the data set
-sample = 4
+sample = int(np.random.randint(0, high=n-1, size=1))
 
 x_pred = X[sample,:]
 
@@ -362,25 +367,27 @@ print("Actual response for the given data point is: {:.2f}".format(Y[sample,0]))
 print("Predicted response for the given data point is: {:.2f}".format(y_pred))
 print("Absolute prediction error is: {:.2f}".format(abs_error))
 
-#%% Ridge regression 
+#%% Ridge regression
+import numpy as np
+import matplotlib.pyplot as plt
 
-tau = 1   # Regularization parameter (set tau = 0 for OLS Regression)
+tau = 0   # Regularization parameter (set tau = 0 for OLS Regression)
 
 # Generate observations drawn from a normal and build design matrix
 p = 10   # features
 n = 500  # samples
 
-X = np.zeros((n,p))     # Design matrix
+X = np.ones((n,p+1))     # Design matrix
 
 for i in range(n):
-    X[i,:] = np.random.standard_normal(size=p)
+    X[i,1:] = np.random.standard_normal(size=p)
     
-Y = np.array(np.random.exponential(scale=1, size=n)).reshape((n,1))   # Response variable
+Y = np.array(np.random.gamma(2,1,n)).reshape((n,1))   # Response variable
 
-beta_ridge = np.linalg.inv(X.T.dot(X)+tau*np.eye(p)).dot(Y) # parameter vector
+beta_ridge = np.linalg.inv(X.T.dot(X) + tau*np.eye(p+1)).dot(X.T).dot(Y) # parameter vector
 
 # Check prediction for a data point in the data set
-sample = 100
+sample = int(np.random.randint(0, high=n-1, size=1))
 
 x_pred = X[sample,:]
 
