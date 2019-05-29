@@ -377,7 +377,7 @@ for i in range(n):
     
 Y = np.array(np.random.exponential(scale=1, size=n)).reshape((n,1))   # Response variable
 
-beta_ridge = np.linalg.inv(X.T @ X+tau*np.eye(p)) @ X.T @ Y # parameter vector
+beta_ridge = np.linalg.inv(X.T.dot(X)+tau*np.eye(p)).dot(Y) # parameter vector
 
 # Check prediction for a data point in the data set
 sample = 100
