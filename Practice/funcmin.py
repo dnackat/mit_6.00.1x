@@ -314,3 +314,36 @@ else:
     plt.xlabel('PC1')
     plt.ylabel('PC2')
 plt.title('Principal Component Analysis')
+
+#%% Principal component regression (for features, d > samples, n)
+
+# Generate observations drawn from a normal and build design matrix
+mean = 0    # mean of distribution
+variance = 1    # variance of distribution
+p = 20   # features
+n = 10  # samples
+
+X = np.zeros((n,p))     # Design matrix
+
+for i in range(n):
+    X[i,:] = np.random.normal(mean, np.sqrt(variance), p)
+    
+Y = np.random.exponential(scale=1.5, size=n)    # Response variable
+
+# Compute the empirical covariance matrix, S, of X
+ones = np.ones((n,1))
+
+H = np.identity(n) - (1/n)*ones.dot(ones.T) # Orthogonal projection matrix H 
+
+S = (1/n)*X.T.dot(H).dot(X)
+
+# Spectral decomposition of S to get eigenvector matrix, P
+P = np.linalg.svd(S)[0]
+
+# Choose number of principal directions to keep
+k = 2
+
+# Chop P so it has only k eigenvectors (columns)
+P_k = P[:,0:k]
+
+# 
