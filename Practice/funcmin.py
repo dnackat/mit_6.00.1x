@@ -321,14 +321,14 @@ plt.title('Principal Component Analysis')
 mean = 0    # mean of distribution
 variance = 1    # variance of distribution
 p = 20   # features
-n = 10  # samples
+n = 15  # samples
 
 X = np.zeros((n,p))     # Design matrix
 
 for i in range(n):
     X[i,:] = np.random.normal(mean, np.sqrt(variance), p)
     
-Y = np.array(np.random.exponential(scale=1.5, size=n)).reshape((n,1))   # Response variable
+Y = np.array(np.random.exponential(scale=1, size=n)).reshape((n,1))   # Response variable
 
 # Compute the empirical covariance matrix, S, of X
 ones = np.ones((n,1))
@@ -341,7 +341,7 @@ S = (1/n)*X.T.dot(H).dot(X)
 P = np.linalg.svd(S)[0]
 
 # Choose number of principal directions to keep
-k = 9
+k = 12
 
 # Chop P so it has only k eigenvectors (columns)
 P_k = P[:,0:k]
