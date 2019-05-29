@@ -275,15 +275,13 @@ plt.savefig('phaseNoise.pdf')
 #%% Trial PCA algorithm
 
 # Generate observations drawn from a normal and build design matrix
-mean = 0    # mean of distribution
-variance = 1    # variance of distribution
 p = 10   # features
 n = 500  # samples
 
 X = np.zeros((n,p))     # Design matrix
 
 for i in range(n):
-    X[i,:] = np.random.normal(mean, np.sqrt(variance), p)
+    X[i,:] = np.random.standard_normal(size=p)
 
 # Compute the empirical covariance matrix, S, of X
 ones = np.ones((n,1))
@@ -317,16 +315,14 @@ plt.title('Principal Component Analysis')
 
 #%% PCR: Principal component regression (for features, p > samples, n)
 
-# Generate observations drawn from a normal and build design matrix
-mean = 0    # mean of distribution
-variance = 1    # variance of distribution
+# Generate observations drawn from a std. normal dist. and build design matrix
 p = 20   # features
-n = 15  # samples
+n = 10  # samples
 
 X = np.zeros((n,p))     # Design matrix
 
 for i in range(n):
-    X[i,:] = np.random.normal(mean, np.sqrt(variance), p)
+    X[i,:] = np.random.standard_normal(size=p)
     
 Y = np.array(np.random.exponential(scale=1, size=n)).reshape((n,1))   # Response variable
 
@@ -341,7 +337,7 @@ S = (1/n)*X.T.dot(H).dot(X)
 P = np.linalg.svd(S)[0]
 
 # Choose number of principal directions to keep
-k = 12
+k = 9
 
 # Chop P so it has only k eigenvectors (columns)
 P_k = P[:,0:k]
@@ -358,10 +354,40 @@ sample = 4
 
 x_pred = X[sample,:]
 
-y_pred = x_pred.dot(beta_PCR)
+y_pred = float(x_pred.dot(beta_PCR))
 
-abs_error = np.abs(Y[sample,0] - float(y_pred))
+abs_error = np.abs(Y[sample,0] - y_pred)
 
 print("Actual response for the given data point is: {:.2f}".format(Y[sample,0]))
-print("Predicted response for the given data point is: {:.2f}".format(float(y_pred)))
+print("Predicted response for the given data point is: {:.2f}".format(y_pred))
+print("Absolute prediction error is: {:.2f}".format(abs_error))
+
+#%% Ridge regression 
+
+tau = 1   # Regularization parameter (set tau = 0 for OLS Regression)
+
+# Generate observations drawn from a normal and build design matrix
+p = 10   # features
+n = 500  # samples
+
+X = np.zeros((n,p))     # Design matrix
+
+for i in range(n):
+    X[i,:] = np.random.standard_normal(size=p)
+    
+Y = np.array(np.random.exponential(scale=1, size=n)).reshape((n,1))   # Response variable
+
+beta_ridge = np.linalg.inv(X.T @ X+tau*np.eye(p)) @ X.T @ Y # parameter vector
+
+# Check prediction for a data point in the data set
+sample = 100
+
+x_pred = X[sample,:]
+
+y_pred = float(x_pred.dot(beta_ridge))
+
+abs_error = np.abs(Y[sample,0] - y_pred)
+
+print("Actual response for the given data point is: {:.2f}".format(Y[sample,0]))
+print("Predicted response for the given data point is: {:.2f}".format(y_pred))
 print("Absolute prediction error is: {:.2f}".format(abs_error))
