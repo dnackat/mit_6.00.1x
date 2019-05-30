@@ -333,13 +333,9 @@ def pc_reg(n, p):
         X[i,:] = np.random.standard_normal(size=p)
     
     Y = np.array(np.random.gamma(2,2,n)).reshape((n,1))   # Response variable
+
     
-    # Standardize the dataset
-    #X = (X - np.mean(X, axis=0))/np.std(X, axis=0)
-    
-    # Compute the empirical covariance matrix, S, of X
-    #ones = np.ones((n,1))
-    
+    # Compute the empirical covariance matrix, S, of X 
     H = np.identity(n) - (1/n)*np.ones((n,n)) # Orthogonal projection matrix H 
     
     S = (1/n)*X.T.dot(H).dot(X)
@@ -371,7 +367,7 @@ def pc_reg(n, p):
         error_vec[i,0] = np.linalg.norm(y_pred - Y)/np.linalg.norm(Y)
     
     plt.figure()
-    plt.plot(range(n),error_vec, 'r-', linewidth='2')
+    plt.plot(range(1,n+1),error_vec, 'r-', linewidth='2')
     plt.title('Prediction error vs. principal components')
     plt.xlabel('Principal components, k')
     plt.ylabel('Normalized prediction error of PCR')
@@ -402,37 +398,46 @@ def gen_XY(n,p):
 # Prompt for filepath
 filepath = input("Enter the complete filepath (/home/user...): ")
 
-# Temporary lists to store data as it is being read
-temp_data = []
-temp_test_data = []
-
 # Read the dataset line-by-line. Get num. of features, p, and 
 # num. of examples, p
-with open(filepath) as input_file:
+def read_Data(filepath):
+    
+    # Temporary lists to store data as it is being read
+    temp_data = []
+    temp_test_data = []
+    
+    with open(filepath) as input_file:
 
-    for line_num, line in enumerate(input_file):
-        if line_num == 0:
-            p, n = line.split()
-            p, n = int(p), int(n)
-        elif line_num == n + 1:
-            T = int(line)
-        elif line_num > 0 and line_num <= N:
-            x1, x2, y = line.split()
-            # Store as ordered pair in temp_data
-            temp_data += [(float(x1), float(x2), float(y))]
-        elif line_num > N + 1 and line_num <= N + T + 1:
-            x1, x2 = line.split()
-            temp_test_data += [(float(x1), float(x2))]
-        
-# Convert temp lists into numpy arrays
-dataset = np.array(temp_data)
-X_pred = np.array(temp_test_data)       
+        for line_num, line in enumerate(input_file):
+            if line_num == 0:
+                p, n = line.split()
+                p, n = int(p), int(n)
+            elif line_num == n + 1:
+                T = int(line)
+            elif line_num > 0 and line_num <= N:
+                x1, x2, y = line.split()
+                # Store as ordered pair in temp_data
+                temp_data += [(float(x1), float(x2), float(y))]
+            elif line_num > N + 1 and line_num <= N + T + 1:
+                x1, x2 = line.split()
+                temp_test_data += [(float(x1), float(x2))]
+            
+    # Convert temp lists into numpy arrays
+    dataset = np.array(temp_data)
+    #X_pred = np.array(temp_test_data)       
 
-# Define X, Y
-X = dataset[:, :p]
-Y = dataset[:, p]
+    # Define X, Y
+    X = dataset[:, :p]
+    Y = dataset[:, p]
+    
+    return X, Y, n
 
-X = np.hstack((np.ones((n,1)),X))     # Add a column of ones for the intercept term
+# Read the dataset
+X, Y, n = read_Data(filepath)
+
+X = X - (np.mean(X, axis=0))/np.std(X, axis=0)  # Standardize X matrix
+
+X = np.hstack((np.ones((n,1)),X))   # Add a column of 1's for the intercept term
 
 beta_ridge = np.linalg.inv(X.T.dot(X) + tau*np.eye(p+1)).dot(X.T).dot(Y) # parameter vector
 
