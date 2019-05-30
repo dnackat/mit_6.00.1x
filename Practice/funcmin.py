@@ -319,7 +319,7 @@ plt.title('Principal Component Analysis')
 import numpy as np
 import matplotlib.pyplot as plt
 
-def pc_reg(n,p):
+def pc_reg(n, p):
     """ This function runs principal component regression on a design matrix (with p > n)
     that is generated using draws from a standard normal distribution using 
     different values of principal components, k, and plots prediction error 
@@ -334,10 +334,13 @@ def pc_reg(n,p):
     
     Y = np.array(np.random.gamma(2,2,n)).reshape((n,1))   # Response variable
     
-    # Compute the empirical covariance matrix, S, of X
-    ones = np.ones((n,1))
+    # Standardize the dataset
+    #X = (X - np.mean(X, axis=0))/np.std(X, axis=0)
     
-    H = np.identity(n) - (1/n)*ones.dot(ones.T) # Orthogonal projection matrix H 
+    # Compute the empirical covariance matrix, S, of X
+    #ones = np.ones((n,1))
+    
+    H = np.identity(n) - (1/n)*np.ones((n,n)) # Orthogonal projection matrix H 
     
     S = (1/n)*X.T.dot(H).dot(X)
     
@@ -365,13 +368,13 @@ def pc_reg(n,p):
         
         y_pred = X.dot(beta_PCR)
         
-        error_vec[i,0] = np.linalg.norm(y_pred - Y)
+        error_vec[i,0] = np.linalg.norm(y_pred - Y)/np.linalg.norm(Y)
     
     plt.figure()
     plt.plot(range(n),error_vec, 'r-', linewidth='2')
     plt.title('Prediction error vs. principal components')
     plt.xlabel('Principal components, k')
-    plt.ylabel('Prediction error of PCR')
+    plt.ylabel('Normalized prediction error of PCR')
     
 pc_reg(25, 100)
     
@@ -379,25 +382,64 @@ pc_reg(25, 100)
 import numpy as np
 import matplotlib.pyplot as plt
 
-tau = 2   # Regularization parameter (set tau = 0 for OLS Regression)
+tau = 0   # Regularization parameter (set tau = 0 for OLS Regression)
 
 # Generate observations drawn from a normal and build design matrix
-p = 50   # features
-n = 500  # samples
-
-X = np.ones((n,p+1))     # Design matrix
-
-for i in range(n):
-    X[i,1:] = np.random.standard_normal(size=p)
+def gen_XY(n,p):
+    """ This function generates a design matrix of size n x p, where p is the 
+    number of features, drawn from a standard normal distribution and a vector
+    of response variables drawn from a gamma(2,1) distribution. """
     
-Y = np.array(np.random.gamma(2,1,n)).reshape((n,1))   # Response variable
+    X = np.ones((n,p+1))     # Design matrix
+    
+    for i in range(n):
+        X[i,1:] = np.random.standard_normal(size=p)
+        
+    Y = np.array(np.random.gamma(2,1,n)).reshape((n,1))   # Response variable
+    
+    return X, Y
+    
+# Prompt for filepath
+filepath = input("Enter the complete filepath (/home/user...): ")
+
+# Temporary lists to store data as it is being read
+temp_data = []
+temp_test_data = []
+
+# Read the dataset line-by-line. Get num. of features, p, and 
+# num. of examples, p
+with open(filepath) as input_file:
+
+    for line_num, line in enumerate(input_file):
+        if line_num == 0:
+            p, n = line.split()
+            p, n = int(p), int(n)
+        elif line_num == n + 1:
+            T = int(line)
+        elif line_num > 0 and line_num <= N:
+            x1, x2, y = line.split()
+            # Store as ordered pair in temp_data
+            temp_data += [(float(x1), float(x2), float(y))]
+        elif line_num > N + 1 and line_num <= N + T + 1:
+            x1, x2 = line.split()
+            temp_test_data += [(float(x1), float(x2))]
+        
+# Convert temp lists into numpy arrays
+dataset = np.array(temp_data)
+X_pred = np.array(temp_test_data)       
+
+# Define X, Y
+X = dataset[:, :p]
+Y = dataset[:, p]
+
+X = np.hstack((np.ones((n,1)),X))     # Add a column of ones for the intercept term
 
 beta_ridge = np.linalg.inv(X.T.dot(X) + tau*np.eye(p+1)).dot(X.T).dot(Y) # parameter vector
 
-# Check prediction for a data point in the data set
+# Check prediction error
 
 y_pred = X.dot(beta_ridge)
         
-normed_error = np.linalg.norm(y_pred - Y)   # Pred. error = ||Y_pred - Y||^2
+normed_error = np.linalg.norm(y_pred - Y)/np.linalg.norm(Y)   # Pred. error = ||Y_pred - Y||
 
-print("Prediction error is: {:.2f}".format(normed_error))
+print("Normalized prediction error (0 to 1) is: {:.2f}".format(normed_error))
