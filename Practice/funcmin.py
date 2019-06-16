@@ -11,15 +11,20 @@ import matplotlib.pyplot as plt
 
 #%% Plot of func
 lam = np.sqrt(2)
-x = np.linspace(-5,5,100)
+x = np.linspace(1,5,100)
 y = (lam/2)*np.exp(-lam*np.abs(x))
 y1 = (1/np.sqrt(2*np.pi))*np.exp(-(1/2)*x**2)
 y2 = (1/np.pi)*(1/(1+x**2))
+y3 = np.log(1+np.exp(-2*x))
+y4 = np.log(1+np.exp(-3*x))
 
 plt.figure()
-plt.plot(x,y,'r-',label='Laplace')
-plt.plot(x,y1,'b-', label='Gaussian')
-plt.plot(x,y2,'k-', label='Cauchy')
+#plt.plot(x,y,'r-',label='Laplace')
+#plt.plot(x,y1,'b-', label='Gaussian')
+#plt.plot(x,y2,'k-', label='Cauchy')
+plt.plot(x,y3,'k-', label='Loss func.-theta')
+plt.plot(x,y4,'r-', label='Loss func.-theta+eps')
+plt.grid(axis='both')
 plt.legend(loc='best')
 
 #%% Eigenvalues
@@ -394,9 +399,6 @@ def gen_XY(n,p):
     Y = np.array(np.random.gamma(2,1,n)).reshape((n,1))   # Response variable
     
     return X, Y
-    
-# Prompt for filepath
-filepath = input("Enter the complete filepath (/home/user...): ")
 
 # Read the dataset line-by-line. Get num. of features, p, and 
 # num. of examples, p
@@ -433,6 +435,10 @@ def read_Data(filepath):
     return X, Y, n
 
 # Read the dataset
+    
+# Prompt for filepath
+filepath = input("Enter the complete filepath (/home/user...): ")
+
 X, Y, n = read_Data(filepath)
 
 X = X - (np.mean(X, axis=0))/np.std(X, axis=0)  # Standardize X matrix
