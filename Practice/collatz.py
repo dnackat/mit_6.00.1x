@@ -7,6 +7,9 @@ Created on Mon Oct 21 10:52:44 2019
 
 Playing with the Collatz conjecture.
 """
+import numpy as np
+import matplotlib.pyplot as plt
+
 def collatz(n, tries):
     """
     This function implements the collatz conjecture. Start with a number, n.
@@ -22,15 +25,25 @@ def collatz(n, tries):
     """
     
     counter = 0
+    prog_list = np.zeros(tries)
+    
     while counter <= tries:
-        counter += 1
         
         if (n == 1):
             print("Successful. Reached 1 in {} tries.".format(counter))
+            break
     
         if (n % 2 == 0):
             n = int(n/2)
         else:
             n = 3*n + 1
+            
+        prog_list[counter] = n
         
+        counter += 1
+    
+    if counter > tries:
+        print("Unsuccessful. Could not reach 1 in {} tries.".format(tries))
+        
+    plt.plot(range(tries), prog_list, 'r-')
 
