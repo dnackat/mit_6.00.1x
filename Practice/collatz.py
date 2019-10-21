@@ -17,17 +17,21 @@ def collatz(n, tries):
     - If n is odd, compute 3*n + 1
     Continue this in a loop until we reach one.
     Inputs: 
-    n: A natural number to start with
-    tries: Number of tries permitted. This is to terminate in case there is 
-    an infinite loop
+        n: A natural number to start with
+        tries: Number of tries permitted. This is to terminate in case there is 
+        an infinite loop
     
-    Output: A string. 'Successful' or 'Unsuccessful'. 
+    Outputs: 
+        string: 'Successful' or 'Unsuccessful'.
+        plot: Plot of the progress
     """
     
     counter = 0
-    prog_list = np.zeros(tries)
+    prog_list = []
     
     while counter <= tries:
+        
+        prog_list.append(n)
         
         if (n == 1):
             print("Successful. Reached 1 in {} tries.".format(counter))
@@ -37,13 +41,10 @@ def collatz(n, tries):
             n = int(n/2)
         else:
             n = 3*n + 1
-            
-        prog_list[counter] = n
         
         counter += 1
     
     if counter > tries:
         print("Unsuccessful. Could not reach 1 in {} tries.".format(tries))
         
-    plt.plot(range(tries), prog_list, 'r-')
-
+    plt.plot(range(len(prog_list)), prog_list, 'r--')
