@@ -7,7 +7,6 @@ Created on Mon Oct 21 10:52:44 2019
 
 Playing with the Collatz conjecture.
 """
-import numpy as np
 import matplotlib.pyplot as plt
 
 def collatz(n, tries):
@@ -34,7 +33,7 @@ def collatz(n, tries):
         prog_list.append(n)
         
         if (n == 1):
-            print("Successful. Reached 1 in {} tries.".format(counter))
+            print("Successful. Reached 1 in {} steps.".format(counter))
             break
     
         if (n % 2 == 0):
@@ -45,6 +44,6 @@ def collatz(n, tries):
         counter += 1
     
     if counter > tries:
-        print("Unsuccessful. Could not reach 1 in {} tries.".format(tries))
+        print("Unsuccessful. Could not reach 1 in {} steps.".format(tries))
         
     plt.plot(range(len(prog_list)), prog_list, 'r--')
