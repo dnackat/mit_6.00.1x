@@ -47,3 +47,5 @@ def collatz(n, tries):
         print("Unsuccessful. Could not reach 1 in {} steps.".format(tries))
         
     plt.plot(range(len(prog_list)), prog_list, 'r--')
+    plt.grid(axis='both')
+    plt.show()
