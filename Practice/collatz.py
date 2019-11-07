@@ -14,14 +14,15 @@ def collatz(n, tries):
     This function implements the collatz conjecture. Start with a number, n.
     - If n is even, halve it
     - If n is odd, compute 3*n + 1
-    Continue this in a loop until we reach one.
+    Continue this iteratively until we reach one.
+    
     Inputs: 
         n: A natural number to start with
         tries: Number of tries permitted. This is to terminate in case there is 
         an infinite loop
     
     Outputs: 
-        string: 'Successful' or 'Unsuccessful'.
+        string: 'Successful' or 'Unsuccessful'
         plot: Plot of the progress
     """
     
